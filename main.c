@@ -26,7 +26,7 @@ const char* NUMS[] = {
 };
 
 
-    struct Card {
+struct Card {
     const char* num;
     const char* suit;
 };
@@ -279,6 +279,37 @@ struct Card* swap_elements(struct Card* hand, int i, int j) {
 }
 
 
+int get_index(struct Card card) {
+    for(int i=0; i<13; i++) {
+        if(card.num == NUMS[i]) {
+            return i;
+        }
+    }
+}
+
+
+// insertion sort
+struct Card* insertion_sort_hand(struct Card* hand) {
+    
+    int n = 5;
+
+    for(int i=1; i<n; i++) {
+        struct Card key = hand[i];
+
+        int j = i - 1;
+
+        while(j >= 0 && get_index(hand[j]) > get_index(key)) {
+            hand[j+1] = hand[j];
+            j = j - 1;
+        }
+
+        hand[j+1] = key;
+    }
+
+    return hand;
+}
+
+
 // struct Card* sortHand(hand) {
 
 // }
@@ -305,12 +336,31 @@ void print_hand(struct Card* hand) {
 
 
 bool isAllSuits(struct Card* hand) {
+    // printf("allsuits\n");
     for(int i=1; i<5; i++) {
+        // printf("%s - %s", hand[0].suit, hand[i].suit);
         if(hand[0].suit != hand[i].suit) {
             return false;
         }
     }
 
+    return true;
+}
+
+
+bool isStraight(struct Card* hand) {
+
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    printf("Checking for straight...\n");
+    for(int i=0; i<4; i++) {
+        printf("%d != %d\n",get_index(hand[i])+1, get_index(hand[i+1]) );
+        if(get_index(hand[i])+1 != get_index(hand[i+1])) {
+            return false;
+        }
+    }
+    printf("IS STRAIGHT!\n");
+
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
     return true;
 }
 
@@ -328,7 +378,22 @@ void determineHand(struct Card* hand) {
         // Check for royal flush, straight flush and flush
         printf("FLUSHish\n");
     }
+
+    if(isStraight(hand) ==  true) {
+        printf("STRAIGHT\n");
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
 
 
 int main() {
@@ -377,21 +442,67 @@ int main() {
         // }
 
         print_hand(hand);
-            
-        hand[0].num = NUMS[4];
-        hand[0].suit = SUITS[1];
-        hand[1].num = NUMS[0];
-        hand[1].suit = SUITS[0];
-        hand[2].num = NUMS[8];
-        hand[2].suit = SUITS[0];
-        hand[3].num = NUMS[2];
-        hand[3].suit = SUITS[0];
-        hand[4].num = NUMS[6];
-        hand[4].suit = SUITS[0];
 
+        // create a test hand (flush)
+        // hand[0].num = NUMS[4];
+        // hand[0].suit = SUITS[0];
+        // hand[1].num = NUMS[0];
+        // hand[1].suit = SUITS[0];
+        // hand[2].num = NUMS[8];
+        // hand[2].suit = SUITS[0];
+        // hand[3].num = NUMS[2];
+        // hand[3].suit = SUITS[0];
+        // hand[4].num = NUMS[6];
+        // hand[4].suit = SUITS[0];
+
+
+        // test hand - straight 2-6
+        // hand[0].num = NUMS[4];
+        // hand[0].suit = SUITS[0];
+        // hand[1].num = NUMS[0];
+        // hand[1].suit = SUITS[0];
+        // hand[2].num = NUMS[2];
+        // hand[2].suit = SUITS[0];
+        // hand[3].num = NUMS[3];
+        // hand[3].suit = SUITS[0];
+        // hand[4].num = NUMS[1];
+        // hand[4].suit = SUITS[0];
+
+
+        // four of a kind
+        // hand[0].num = NUMS[6];   // 7
+        // hand[0].suit = SUITS[2];
+        // hand[1].num = NUMS[12];  // K (random kicker)
+        // hand[1].suit = SUITS[1];
+        // hand[2].num = NUMS[6];   // 7
+        // hand[2].suit = SUITS[0];
+        // hand[3].num = NUMS[6];   // 7
+        // hand[3].suit = SUITS[3];
+        // hand[4].num = NUMS[6];   // 7
+        // hand[4].suit = SUITS[1];
+
+
+        // pair
+        hand[0].num = NUMS[9];   // 10
+        hand[0].suit = SUITS[2];
+        hand[1].num = NUMS[4];   // 5 (random)
+        hand[1].suit = SUITS[0];
+        hand[2].num = NUMS[9];   // 10
+        hand[2].suit = SUITS[1];
+        hand[3].num = NUMS[11];  // King (random)
+        hand[3].suit = SUITS[3];
+        hand[4].num = NUMS[2];   // 3 (random)
+        hand[4].suit = SUITS[2];
+
+        hand = insertion_sort_hand(hand);
         determineHand(hand);
-        swap_elements(hand, 0,5);
-        print_hand(hand);
+        swap_elements(hand, 0,4);
+        
+
+        // printf("PRE SORT: \n");
+        // print_hand(hand);
+
+
 
         
         printf("Do you want to play another hand(y/N)? \n> ");
