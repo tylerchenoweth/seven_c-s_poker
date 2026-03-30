@@ -78,7 +78,7 @@ struct Card* shuffle_deck(struct Card* deck) {
         do {
             in_deck = false;
             new_num = get_random_num(52);
-            for(int j=0; j<i+1; j++) {
+            for(int j=0; j<i; j++) {
                 if(new_deck_order[j] == new_num) {
                     in_deck = true;
                     break;
@@ -335,7 +335,39 @@ void print_hand(struct Card* hand) {
 
 
 
-bool isAllSuits(struct Card* hand) {
+
+
+
+
+
+
+
+
+
+
+
+void determineWinner(struct Card* hand) {
+    printf("> Determining Winner...\n\n");
+    print_hand(hand);
+}
+
+
+
+
+
+// this is a reusable function for hand functions to check for pairs
+bool isPair(struct Card* hand, int index) {
+    if(hand[index].num == hand[index+1].num) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+// next three functions are actual hands and reusable functions
+//  for the other hands functions
+bool isFlush(struct Card* hand) {
     // printf("allsuits\n");
     for(int i=1; i<5; i++) {
         // printf("%s - %s", hand[0].suit, hand[i].suit);
@@ -349,41 +381,152 @@ bool isAllSuits(struct Card* hand) {
 
 
 bool isStraight(struct Card* hand) {
-
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("Checking for straight...\n");
     for(int i=0; i<4; i++) {
-        printf("%d != %d\n",get_index(hand[i])+1, get_index(hand[i+1]) );
         if(get_index(hand[i])+1 != get_index(hand[i+1])) {
             return false;
         }
     }
-    printf("IS STRAIGHT!\n");
 
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n");
     return true;
 }
 
 
-void determineWinner(struct Card* hand) {
-    printf("> Determining Winner...\n\n");
-    print_hand(hand);
+bool isSet(struct Card* hand, int index) {
+    if(isPair(hand, index) == true && isPair(hand, index+1) == true) {
+        return true;
+    } else {
+        return false;
+    }
 }
+
+
+
+// below are the functions to check for hands
+bool isRoyalFlush(struct Card* hand) {
+    if(isFlush(hand) == true && isStraight(hand) == true && hand[0].num == "10") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+bool isStraighFlush(struct Card* hand) {
+    if(isFlush(hand) == true && isStraight(hand) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+bool isFourOfAKind(struct Card* hand) {
+    for(int i=0; i<3; i++) {
+        if(hand[i].num != hand[i+1].num) {
+            break;
+        }else if(i == 2) {
+            return true;
+        }
+    }
+
+    for(int i=1; i<4; i++) {
+        if(hand[i].num != hand[i+1].num) {
+            break;
+        } else if(i == 3) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool isFullHouse(struct Card* hand) {
+    if(isPair(hand, 0) == true && isSet(hand, 2) == true) {
+        return true;
+    } else if(isPair(hand, 3) == true && isSet(hand, 0) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+bool isThreeOfAKind(struct Card* hand) {
+    for(int i=0; i<3; i++) {
+        if(isSet(hand, i) == true) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool isTwoPair(struct Card* hand) {
+    if(isPair(hand, 0) == true && isPair(hand, 2) == true) {
+        return true;
+    } else if(isPair(hand, 0) == true && isPair(hand, 3) == true) {
+        return true;
+    } else if(isPair(hand, 1) == true && isPair(hand, 3) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+bool isOnePair(struct Card* hand) {
+    for(int i=0; i<4; i++) {
+        if(isPair(hand, i) == true) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
+
+
 
 
 void determineHand(struct Card* hand) {
     print_hand(hand);
 
-    if(isAllSuits(hand) == true) {
-        // Check for royal flush, straight flush and flush
-        printf("FLUSHish\n");
+    // if(isFlush(hand) == true) {
+    //     // Check for royal flush, straight flush and flush
+    //     printf("FLUSHish\n");
+    // }
+
+    // if(isStraight(hand) ==  true) {
+    //     printf("STRAIGHT\n");
+    // }
+
+    // if(isPair(hand, 2) ==  true) {
+    //     printf("PAIR\n");
+    // }
+
+    if(isRoyalFlush(hand) == true) {
+        printf("ROYAL FLUSH!\n");
+    } else if(isStraighFlush(hand) == true) {
+        printf("STRAIGHT FLUSH\n");
+    } else if(isFourOfAKind(hand) == true) {
+        printf("--FOUR OF A KIND--\n");
+    } else if(isFullHouse(hand) == true) {
+        printf("--FULL HOUSE--\n");
+    } else if(isStraight(hand) == true) {
+        printf("--STRAIGHT--\n");
+    } else if(isThreeOfAKind(hand) == true) {
+        printf("--THREE OF A KIND--\n");
+    } else if(isTwoPair(hand) == true) {
+        printf("--Two Pair--\n");
+    } else if(isOnePair(hand) == true) {
+        printf("--ONE PAIR--\n");
+    } else {
+        printf("--youre a loser--\n");
     }
-
-    if(isStraight(hand) ==  true) {
-        printf("STRAIGHT\n");
-    }
-
-
 }
 
 
@@ -443,6 +586,22 @@ int main() {
 
         print_hand(hand);
 
+        // full house
+        // hand[0].num = NUMS[12];   // 7
+        // hand[0].suit = SUITS[0];
+
+        // hand[1].num = NUMS[6];   // 7
+        // hand[1].suit = SUITS[1];
+
+        // hand[2].num = NUMS[6];   // 7
+        // hand[2].suit = SUITS[2];
+
+        // hand[3].num = NUMS[12];  // A
+        // hand[3].suit = SUITS[2]; // h
+
+        // hand[4].num = NUMS[12];  // A
+        // hand[4].suit = SUITS[3]; // s
+
         // create a test hand (flush)
         // hand[0].num = NUMS[4];
         // hand[0].suit = SUITS[0];
@@ -472,7 +631,7 @@ int main() {
         // four of a kind
         // hand[0].num = NUMS[6];   // 7
         // hand[0].suit = SUITS[2];
-        // hand[1].num = NUMS[12];  // K (random kicker)
+        // hand[1].num = NUMS[0];  // K (random kicker)
         // hand[1].suit = SUITS[1];
         // hand[2].num = NUMS[6];   // 7
         // hand[2].suit = SUITS[0];
@@ -482,21 +641,37 @@ int main() {
         // hand[4].suit = SUITS[1];
 
 
-        // pair
-        hand[0].num = NUMS[9];   // 10
-        hand[0].suit = SUITS[2];
-        hand[1].num = NUMS[4];   // 5 (random)
-        hand[1].suit = SUITS[0];
-        hand[2].num = NUMS[9];   // 10
-        hand[2].suit = SUITS[1];
-        hand[3].num = NUMS[11];  // King (random)
-        hand[3].suit = SUITS[3];
-        hand[4].num = NUMS[2];   // 3 (random)
-        hand[4].suit = SUITS[2];
+        // // pair
+        // hand[0].num = NUMS[9];   // 10
+        // hand[0].suit = SUITS[2];
+        // hand[1].num = NUMS[4];   // 5 (random)
+        // hand[1].suit = SUITS[0];
+        // hand[2].num = NUMS[9];   // 10
+        // hand[2].suit = SUITS[1];
+        // hand[3].num = NUMS[11];  // King (random)
+        // hand[3].suit = SUITS[3];
+        // hand[4].num = NUMS[2];   // 3 (random)
+        // hand[4].suit = SUITS[2];
+
+
+        // create a test hand (flush)
+        // hand[0].num = NUMS[7];
+        // hand[0].suit = SUITS[0];
+        // hand[1].num = NUMS[11];
+        // hand[1].suit = SUITS[0];
+        // hand[2].num = NUMS[10];
+        // hand[2].suit = SUITS[0];
+        // hand[3].num = NUMS[9];
+        // hand[3].suit = SUITS[0];
+        // hand[4].num = NUMS[8];
+        // hand[4].suit = SUITS[0];
+
+        
 
         hand = insertion_sort_hand(hand);
         determineHand(hand);
-        swap_elements(hand, 0,4);
+        printf("\n*************************************\n\n");
+        // swap_elements(hand, 0,4);
         
 
         // printf("PRE SORT: \n");
