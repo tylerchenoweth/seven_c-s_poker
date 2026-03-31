@@ -6,8 +6,8 @@ CFLAGS = -Wall -Wextra -std=c99 -g
 all: main
 
 # Link everything into the executable "main"
-main: main.c hand_stuff.c constants.c
-	$(CC) $(CFLAGS) -o main main.c hand_stuff.c constants.c -I.
+main: main.c prepare_game.c hand_stuff.c constants.c
+	$(CC) $(CFLAGS) -o main main.c prepare_game.c hand_stuff.c constants.c -I.
 
 # Clean target
 clean:
