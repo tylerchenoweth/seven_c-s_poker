@@ -1,30 +1,23 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "hand_stuff.h"
 
-const char* SUITS[] = {
-    "\u2660",
-    "\u2665",
-    "\u2666",
-    "\u2663"
-};
-
-const char* NUMS[] = {
-    "2", "3", "4", "5", "6",  
-    "7", "8", "9", "10",  
-    "J", "Q", "K", "A" 
-};
 
 
-
+// internal function
 int get_index(struct Card card) {
     for(int i=0; i<13; i++) {
         if(card.num == NUMS[i]) {
             return i;
         }
     }
+
+    return -1; // Return -1 if the card number is not found
 }
+
 
 
 // this is a reusable function for hand functions to check for pairs
@@ -74,7 +67,7 @@ bool isSet(struct Card* hand, int index) {
 
 // below are the functions to check for hands
 bool isRoyalFlush(struct Card* hand) {
-    if(isFlush(hand) == true && isStraight(hand) == true && hand[0].num == "10") {
+    if(isFlush(hand) == true && isStraight(hand) == true && strcmp(hand[0].num, "10") == 0) {
         return true;
     } else {
         return false;

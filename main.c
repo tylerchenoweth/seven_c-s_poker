@@ -1,3 +1,4 @@
+// #include "constants.h"
 #include "hand_stuff.h"
 
 #include <stdio.h>
@@ -25,28 +26,9 @@ bool isOnePair(struct Card* hand);
 
 
 
-// const char* SUITS[] = {
-//     "\u2660",
-//     "\u2665",
-//     "\u2666",
-//     "\u2663"
-// };
 
-// const char* NUMS[] = {
-//     "2", "3", "4", "5", "6",  
-//     "7", "8", "9", "10",  
-//     "J", "Q", "K", "A" 
-// };
-
-
-// struct Card {
-//     const char* num;
-//     const char* suit;
-// };
-
-
-int get_random_num(int max_num) {
-    int num = (rand() % 52);
+int get_random_num(size_t max_num) {
+    int num = (rand() % max_num);
 
     return num;
 }
@@ -106,6 +88,9 @@ struct Card* shuffle_deck(struct Card* deck) {
         new_deck[i].num = deck[new_deck_order[i]].num;
         new_deck[i].suit = deck[new_deck_order[i]].suit;
 
+        if(i == 5 || i == 10) {
+            printf("\n");
+        }
         printf("%s%s ", new_deck[i].num, new_deck[i].suit);
         if(i%13 == 0 && i != 0) {
             printf("\n");
@@ -137,7 +122,7 @@ void test_prints() {
     printf("\n-------------------------------\n");
     printf("| >>> START TEST FUNCTION <<< |\n");
     printf("-------------------------------\n\n");
-    size_t suit_size = sizeof(SUITS) / sizeof(SUITS[0]);
+    int suit_size = (sizeof(SUITS) / sizeof(SUITS[0]));
 
     printf("* Printing suits... ");
     for(int i=0; i<suit_size; i++) {
@@ -230,7 +215,7 @@ bool* redraw() {
         printf("> ");
         get_string_input(new_hand_input, sizeof(new_hand_input));
         
-        for(int i=0; i<strlen(new_hand_input); i++) {
+        for(size_t i=0; i<strlen(new_hand_input); i++) {
             if(is_in_range(new_hand_input[i], '1','5')) {
                 if(has_zero == true) {
                     printf("Invalid input. You entered a 0 and a number(s) between 1-5...\n");
@@ -258,7 +243,7 @@ bool* redraw() {
                 new_cards_bool[i] = true;
             }
         } else if(valid_input == true) {
-            for(int i=0; i<strlen(new_hand_input); i++) {
+            for(size_t i=0; i<strlen(new_hand_input); i++) {
                 if(new_hand_input[i] == ' ') {
                     continue;
                 } else {
@@ -278,18 +263,6 @@ bool* redraw() {
     return new_cards_bool;
 }
 
-
-
-struct Card* swap_elements(struct Card* hand, int i, int j) {
-    
-    if(i == j) return hand;
-
-    struct Card temp = hand[i];
-    hand[i] = hand[j];
-    hand[j] = temp;
-
-    return hand;
-}
 
 
 
@@ -317,10 +290,6 @@ struct Card* insertion_sort_hand(struct Card* hand) {
 }
 
 
-// struct Card* sortHand(hand) {
-
-// }
-
 
 
 void print_hand(struct Card* hand) {
@@ -338,53 +307,16 @@ void print_hand(struct Card* hand) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void determineWinner(struct Card* hand) {
     printf("> Determining Winner...\n\n");
-    print_hand(hand);
+    // print_hand(hand);
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
 void determineHand(struct Card* hand) {
     print_hand(hand);
 
-    // if(isFlush(hand) == true) {
-    //     // Check for royal flush, straight flush and flush
-    //     printf("FLUSHish\n");
-    // }
-
-    // if(isStraight(hand) ==  true) {
-    //     printf("STRAIGHT\n");
-    // }
-
-    // if(isPair(hand, 2) ==  true) {
-    //     printf("PAIR\n");
-    // }
 
     if(isRoyalFlush(hand) == true) {
         printf("ROYAL FLUSH!\n");
@@ -407,14 +339,7 @@ void determineHand(struct Card* hand) {
     }
 }
 
-
-
-
-
-
-
-
-
+// struct Card* getTestHand(int num)
 
 
 int main() {
@@ -436,11 +361,11 @@ int main() {
 
 
     system("clear");
-    // printf("Tyler's 7 C's Poker Project!\n\n");
-    // printf("Enter your name \n> ");
-    // scanf("%s", playerName);
-    // printf("\nWelcome, %s!\n\n", playerName);
-    // while (getchar() != '\n' && getchar() != EOF);
+    printf("Tyler's Seven C's Poker Project!\n\n");
+    printf("Enter your name \n> ");
+    scanf("%s", playerName);
+    printf("\nWelcome, %s!\n\n", playerName);
+    while (getchar() != '\n' && getchar() != EOF);
 
     deck = load_deck();
 
@@ -450,18 +375,23 @@ int main() {
         deck = shuffle_deck(deck);   
         hand = deal_hand(deck);
 
-        // print_hand(hand);
+        
 
-        // bool *new_cards_bool = redraw();
-        // int index = 5;
+        hand = insertion_sort_hand(hand);
+        print_hand(hand);
+        bool *new_cards_bool = redraw();
+        print_hand(hand);
+        int index = 5;
 
-        // for(int i=0; i<5; i++) {
-        //     if(new_cards_bool[i] == true) {
-        //         hand[i] = deck[index];
-        //         index++;
-        //     }
-        // }
+        // get new cards from the deck
+        for(int i=0; i<5; i++) {
+            if(new_cards_bool[i] == true) {
+                hand[i] = deck[index];
+                index++;
+            }
+        }
 
+        hand = insertion_sort_hand(hand);
         print_hand(hand);
 
         // full house
@@ -480,81 +410,10 @@ int main() {
         // hand[4].num = NUMS[12];  // A
         // hand[4].suit = SUITS[3]; // s
 
-        // create a test hand (flush)
-        // hand[0].num = NUMS[4];
-        // hand[0].suit = SUITS[0];
-        // hand[1].num = NUMS[0];
-        // hand[1].suit = SUITS[0];
-        // hand[2].num = NUMS[8];
-        // hand[2].suit = SUITS[0];
-        // hand[3].num = NUMS[2];
-        // hand[3].suit = SUITS[0];
-        // hand[4].num = NUMS[6];
-        // hand[4].suit = SUITS[0];
-
-
-        // test hand - straight 2-6
-        // hand[0].num = NUMS[4];
-        // hand[0].suit = SUITS[0];
-        // hand[1].num = NUMS[0];
-        // hand[1].suit = SUITS[0];
-        // hand[2].num = NUMS[2];
-        // hand[2].suit = SUITS[0];
-        // hand[3].num = NUMS[3];
-        // hand[3].suit = SUITS[0];
-        // hand[4].num = NUMS[1];
-        // hand[4].suit = SUITS[0];
-
-
-        // four of a kind
-        // hand[0].num = NUMS[6];   // 7
-        // hand[0].suit = SUITS[2];
-        // hand[1].num = NUMS[0];  // K (random kicker)
-        // hand[1].suit = SUITS[1];
-        // hand[2].num = NUMS[6];   // 7
-        // hand[2].suit = SUITS[0];
-        // hand[3].num = NUMS[6];   // 7
-        // hand[3].suit = SUITS[3];
-        // hand[4].num = NUMS[6];   // 7
-        // hand[4].suit = SUITS[1];
-
-
-        // // pair
-        // hand[0].num = NUMS[9];   // 10
-        // hand[0].suit = SUITS[2];
-        // hand[1].num = NUMS[4];   // 5 (random)
-        // hand[1].suit = SUITS[0];
-        // hand[2].num = NUMS[9];   // 10
-        // hand[2].suit = SUITS[1];
-        // hand[3].num = NUMS[11];  // King (random)
-        // hand[3].suit = SUITS[3];
-        // hand[4].num = NUMS[2];   // 3 (random)
-        // hand[4].suit = SUITS[2];
-
-
-        // create a test hand (flush)
-        // hand[0].num = NUMS[7];
-        // hand[0].suit = SUITS[0];
-        // hand[1].num = NUMS[11];
-        // hand[1].suit = SUITS[0];
-        // hand[2].num = NUMS[10];
-        // hand[2].suit = SUITS[0];
-        // hand[3].num = NUMS[9];
-        // hand[3].suit = SUITS[0];
-        // hand[4].num = NUMS[8];
-        // hand[4].suit = SUITS[0];
 
         
-
-        hand = insertion_sort_hand(hand);
         determineHand(hand);
         printf("\n*************************************\n\n");
-        // swap_elements(hand, 0,4);
-        
-
-        // printf("PRE SORT: \n");
-        // print_hand(hand);
-
 
 
         
