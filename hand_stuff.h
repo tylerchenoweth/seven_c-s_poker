@@ -2,12 +2,7 @@
 #define HAND_STUFF_H
 
 #include "constants.h"
-#include <stdbool.h>
 
-struct Card {
-    const char* num;
-    const char* suit;
-};
 
 int get_index(struct Card card);
 
