@@ -189,7 +189,7 @@ int main() {
             printf("You lost: $%d\n", bet);
         }
         printf("New Balance: $%d\n", bankroll);
-        printf("\n*************************************\n\n");
+        
 
 
         if(bankroll > 0) {
