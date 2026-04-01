@@ -1,10 +1,5 @@
 #include "prepare_game.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-
-
 
 int get_random_num(size_t max_num) {
     int num = (rand() % max_num);
@@ -16,15 +11,12 @@ int get_random_num(size_t max_num) {
 
 
 struct Card* load_deck() {
-
     printf("> LOADING DECK...\n");
     struct Card* deck = (struct Card*)malloc(52 * sizeof(struct Card));
 
     if (deck == NULL) {
         return NULL; // Handle allocation failure
     }
-
-    
 
     for(int i=0; i<52; i++) {
         deck[i].num = NUMS[i%13];
@@ -73,19 +65,28 @@ struct Card* shuffle_deck(struct Card* deck) {
     }
 
 
-    int lines_count[5] = {5, 10, 19, 30, 42};
+    int line_index = 0;
+    int lines_count[6] = {5, 10, 19, 29, 40, 52};
 
-    for(int i=0; i<52; i++) {
-        printf("%s%s ", new_deck[i].num, new_deck[i].suit);
+    // for(int i=0; i<52; i++) {
 
-        for(int j=0; j<5; j++) {
-            if(i == lines_count[j]) {
-                printf("\n");
-            }
-        }
-    }
+    //     // for(int j=0; j<5; j++) {
+    //     //     if(i == lines_count[j]) {
+    //     //         printf("\n");
+    //     //     }
+    //     // }
 
-    printf("\n\n");
+    //     if(i == lines_count[line_index]) {
+    //         printf("\n");
+    //         line_index++;
+    //     }
+
+    //     printf("%s%s ", new_deck[i].num, new_deck[i].suit);
+
+        
+    // }
+
+    // printf("\n\n");
     return new_deck;
 }
 
@@ -114,6 +115,7 @@ bool is_in_range(char c, char min, char max) {
 // Function takes a buffer and its size
 // For the redraw function
 void get_string_input(char *buffer, int buffer_size) {
+    // printf("GET STRING NIPUTALKFJLA:FJS:LDJFJD:LSFJ\n\n\n");
     if (fgets(buffer, buffer_size, stdin) != NULL) {
         // Remove newline if present
         size_t len = strlen(buffer);
@@ -121,7 +123,7 @@ void get_string_input(char *buffer, int buffer_size) {
             buffer[len - 1] = '\0';
         }
         
-        // printf("You entered: %s\n", buffer);
+        // printf("You entered: >>>%s<<<\n", buffer);
     } else {
         printf("Error reading input.\n");
     }
