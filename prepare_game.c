@@ -60,13 +60,13 @@ struct Card* shuffle_deck(struct Card* deck) {
         new_deck[i].suit = deck[new_deck_order[i]].suit;
 
         if(i%13 == 0 && i != 0) {
-            printf("\n");
+            // printf("\n");
         }
     }
 
 
-    int line_index = 0;
-    int lines_count[6] = {5, 10, 19, 29, 40, 52};
+    // int line_index = 0;
+    // int lines_count[6] = {5, 10, 19, 29, 40, 52};
 
     // for(int i=0; i<52; i++) {
 
