@@ -1,6 +1,7 @@
 // #include "constants.h"
 #include "hand_stuff.h"
 #include "prepare_game.h"
+#include "db_crud.h"
 
 
 // hand_stuff.c prototypes
@@ -31,6 +32,13 @@ struct Card* insertion_sort_hand(struct Card* hand);
 void print_hand(struct Card* hand);
 int determineWinner(struct Card* hand, int bet);
 int determineHand(struct Card* hand);
+
+
+// db_crud.c prototypes
+PlayerData db_main(void);
+
+
+
 
 
 void test_prints() {
@@ -72,7 +80,7 @@ void test_prints() {
 }
 
 
-struct Card* getTestHand(int num[], int suit[]) {
+struct Card* getTestHand(/*int num[], int suit[]*/) {
     struct Card* hand = malloc(5 * sizeof(struct Card));
 
     // full house
@@ -98,7 +106,7 @@ struct Card* getTestHand(int num[], int suit[]) {
 int get_bet(int bankroll) {
     int bet;
 
-    printf("Your bankroll: $%d.\n", bankroll);
+    printf("Bankroll: $%d\n\n", bankroll);
     printf("Please enter your bet: \n> ");
 
     while(true) {
@@ -124,16 +132,17 @@ int get_bet(int bankroll) {
 
 
 int main() {
+    
     srand((unsigned)time(NULL));
 
-    int bankroll = 1000;
+    int bankroll = 0;
     int bet = 0;
     int pot = 0;
 
     bool playAgain = true;
 
     char playAgainInput[100] = "y";
-    char playerName[100];
+    // char playerName[100];
 
     struct Card* deck;
     struct Card* hand;
@@ -145,17 +154,29 @@ int main() {
     printf("|  Tyler's Seven C's Poker Project!  |\n");
     printf("|                                    |\n");
     printf("--------------------------------------\n\n");
-    printf("Enter your name \n> ");
-    scanf("%s", playerName);
+    // printf("Enter your name \n> ");
+    // scanf("%s", playerName);
+    // char *playerName = db_main();
+    PlayerData player = db_main();
+    char *playerName = player.playerName;
+    bankroll = player.bankroll;
+    // printf("main got: %s\n",    );
     printf("\n*** Welcome, %s! ***\n\n", playerName);
-    while (getchar() != '\n' && getchar() != EOF);
+    printf("Bankroll: $%d\n\n", bankroll);
+    // while (getchar() != '\n' && getchar() != EOF);
 
     deck = load_deck();
 
 
     while(playAgain == true) {
 
+        if(bankroll <= 0) {
+            printf("\n>>> You went bust. Go to the bank for a loan. <<<\n\n\n");
+            break;
+        }
+
         deck = shuffle_deck(deck);  
+        printf("\n\n******* START NEW HAND *******\n\n");
         bet = get_bet(bankroll); 
         bankroll -= bet;
         pot += bet;
@@ -176,19 +197,19 @@ int main() {
         }
 
         hand = insertion_sort_hand(hand);
-        printf("YOUR NEW HAND:\n");
+        printf("\nYOUR NEW HAND:\n");
         print_hand(hand);
         
         int winnings = determineWinner(hand, bet);
         bankroll += winnings;
 
-        printf("You bet: $%d\n", bet);
+        printf("\nYou bet: $%d\n", bet);
         if(winnings > 0) {
             printf("You won: $%d\n", winnings);
         } else {
             printf("You lost: $%d\n", bet);
         }
-        printf("New Balance: $%d\n", bankroll);
+        printf("New Balance: $%d\n\n", bankroll);
         
 
 
@@ -203,16 +224,18 @@ int main() {
             printf("You went bust...\n");
             playAgain = false;
         }
-        printf("END GAME LOOP\n");
+        // printf("END GAME LOOP\n");
     } // end game loop
 
-    printf("bye bye...");
+    
 
 
+    printf("\n");
+    update_bankroll(playerName, bankroll);
+    printf("\n\n");
 
-
-
-
+    printf("\"bye bye...\"\n");
+    printf("\t- Jo Dee Messina\n\n");
 
 
 
