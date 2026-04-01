@@ -154,10 +154,12 @@ int determineHand(struct Card* hand) {
         printf("--THREE OF A KIND--\n");
         return 3;
     } else if(isTwoPair(hand) == true) {
-        printf("--Two Pair--\n");
+        printf("--TWO PAIR--\n");
         return 2;
     } else if(isOnePair(hand) == true) {
-        printf("--ONE PAIR--\n");
+        printf("----------------\n");
+        printf("|-- ONE PAIR --|\n");
+        printf("----------------\n");
         return 1;
     } else {
         printf("--youre a loser--\n");
