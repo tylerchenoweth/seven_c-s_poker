@@ -165,8 +165,8 @@ void get_user_data(char **name, int *bankroll) {
 
 
 
-int update_bankroll(char *name, int new_money) {
-    printf("Saving your new balance...\n");
+int update_bankroll(char *name, int new_bankroll) {
+    printf("Saving your new balance... $%d\n", new_bankroll);
     FILE *fp = fopen("seven_cs_database.csv", "r");
     FILE *temp = fopen("temp.csv", "w");
 
@@ -196,7 +196,7 @@ int update_bankroll(char *name, int new_money) {
                     trim_whitespace(id),
                     trim_whitespace(user),
                     trim_whitespace(password),
-                    new_money
+                    new_bankroll
                 );
             } else {
                 fputs(row_copy, temp);
