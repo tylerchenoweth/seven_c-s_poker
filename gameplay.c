@@ -1,6 +1,6 @@
 #include "prepare_game.h"
 #include "hand_stuff.h"
-#include "gameplay.h"
+// #include "gameplay.h"
 
 
 
@@ -109,7 +109,7 @@ struct Card* insertion_sort_hand(struct Card* hand) {
 
 
 
-void print_hand(struct Card* hand) {
+void print_hand_non_fancy(struct Card* hand) {
     printf("\n");
     printf("1:    2:    3:    4:    5:\n");
     printf("---------------------------\n");
@@ -129,8 +129,7 @@ void print_hand(struct Card* hand) {
 
 
 int determineHand(struct Card* hand) {
-    print_hand(hand);
-
+    // print_hand(hand);
 
     if(isRoyalFlush(hand) == true) {
         printf("--ROYAL FLUSH!--\n");
