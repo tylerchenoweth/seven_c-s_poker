@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <limits>
+#include <iomanip>
 
 using namespace std;
 
@@ -70,7 +71,6 @@ class OneCard {
 };
 
 
-
 void printDeck(OneCard[]);
 void initiateCard(OneCard[]);
 void swapCards(OneCard[], int, int);
@@ -82,8 +82,6 @@ int determineHand(OneCard[]);
 void handleBet(int&, int, int);
 bool isInteger(const string&);
 int getIntegerInput();
-
-
 
 
 int main() {
@@ -114,10 +112,10 @@ int main() {
         cout << endl << "HOW MUCH DO YOU WANT TO BET \n$";
         do {
             betAmount = getIntegerInput();
-        } while(bankroll <= 0);
+        } while(betAmount <= 0);
 
         initiateCard(Deck);
-        printDeck(Deck);
+        // printDeck(Deck);
         shuffleDeck(Deck);
         // printDeck(Deck);
         sortHand(Deck);
@@ -190,13 +188,87 @@ void shuffleDeck(OneCard Deck[]) {
 
 
 void displayHand(OneCard Deck[]) {
-    cout << "-----------------------------" << endl;
-    for(int i=0; i<5; i++) {
-        cout << Deck[i].getCardNum() << Deck[i].getCardSuit() << " - ";
+    /*
+        0 - top or bottom edge
+        1 - number left row
+        2 - number right row
+        3 - 10 left row
+        4 - 10 right row
+        5 - face left row
+        6 - face right row
+        7 - empty row 
+        8 - one suit row
+        9 - two suit row
+    */
+    int cardLines[13][11] = {
+        {0, 1, 8, 7, 7, 7, 7, 7, 8, 2, 0}, // 2
+        {0, 1, 8, 7, 7, 8, 7, 7, 8, 2, 0}, // 3
+        {0, 1, 9, 7, 7, 7, 7, 7, 9, 2, 0}, // 4
+        {0, 1, 9, 7, 7, 8, 7, 7, 9, 2, 0}, // 5
+        {0, 1, 9, 7, 7, 9, 7, 7, 9, 2, 0}, // 6
+        {0, 1, 9, 8, 7, 9, 7, 7, 9, 2, 0}, // 7
+        {0, 1, 9, 7, 9, 7, 9, 7, 9, 2, 0}, // 8
+        {0, 1, 9, 7, 9, 8, 9, 7, 9, 2, 0}, // 9
+        {0, 3, 9, 8, 9, 7, 9, 8, 9, 4, 0}, // 10
+        {0, 5, 7, 7, 7, 7, 7, 7, 7, 6, 0}, // J
+        {0, 5, 7, 7, 7, 7, 7, 7, 7, 6, 0}, // Q
+        {0, 5, 7, 7, 7, 7, 7, 7, 7, 6, 0}, // K
+        {0, 1, 7, 7, 7, 8, 7, 7, 7, 2, 0}, // A
+    };
+    int space = 3;
+
+    cout << endl;
+
+    // go through lines
+    for(int i=0; i<11; i++) {
+        // go through cards
+        for(int k=0; k<5; k++) {
+            // cout << cardLines[Deck[k].getNumIndex()][i] << " ";
+            string num = Deck[k].getCardNum();
+            string suit = Deck[k].getCardSuit();
+
+            switch(cardLines[Deck[k].getNumIndex()][i]) 
+            {
+                case 0:
+                    cout << "---------------" << setw(space) << "";
+                    break;
+                case 1:
+                    cout << "|" << num << "            " << "|" << setw(space) << "";
+                    break;
+                case 2:
+                    cout << "|" << "            " << num << "|" << setw(space) << "";
+                    break;
+                case 3:
+                    cout << "|" <<  "10           " << "|" << setw(space) << "";
+                    break;
+                case 4:
+                    cout << "|" <<  "           10" << "|" << setw(space) << "";
+                    break;
+                case 5:
+                    cout << "|" << num << suit << "           " << "|" << setw(space) << "";
+                    break;
+                case 6:
+                    cout << "|" << "           " << suit << num << "|" << setw(space) << "";
+                    break;
+                case 7:
+                    cout << "|             |" << setw(space) << "";
+                    break;
+                case 8:
+                    cout << "|" << "      " << suit << "      " << "|" << setw(space) << "";
+                    break;
+                case 9:
+                    cout << "|  " << suit << "       " << suit << "  |" << setw(space) << "";
+                    break;
+                default:
+                    cout << "BAD LINE INPUT";
+                    break;     
+            }; 
+        }
+        cout << endl;
     }
-    cout << "|\n-----------------------------" << endl;
-    cout << endl << endl;
+    cout << endl;
 }
+
 
 
 void holdOrDraw(OneCard Deck[]) {
