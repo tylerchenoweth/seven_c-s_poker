@@ -99,17 +99,22 @@ int main() {
     int pokerHandRank;
     string strBetAmount;
     bool playAgain = true;
+    int handsWon = 0;
+    int handsLost = 0;
 
     cout << "ENTER SEED MONEY \n$";
     do {
         bankroll = getIntegerInput();
     } while(bankroll <= 0);
 
+    cout << endl;
+
     while(playAgain == true) {
-        
         string playAgainInput;
 
-        cout << endl << "HOW MUCH DO YOU WANT TO BET \n$";
+        cout << "BANKROLL: $" << bankroll << endl;
+        cout << "HOW MUCH DO YOU WANT TO BET \n$";
+
         do {
             betAmount = getIntegerInput();
         } while(betAmount <= 0);
@@ -126,21 +131,54 @@ int main() {
         pokerHandRank = determineHand(Deck);
         handleBet(bankroll, betAmount, pokerHandRank);
 
-        while(
-            playAgainInput != "y" && playAgainInput != "Y" &&
-            playAgainInput != "n" && playAgainInput != "N" 
-        ) {
-            cout << "Do you want to play again(y/N)? \n> ";
-            cin >> playAgainInput;
+        if(pokerHandRank == 0)
+            handsLost += 1;
+        else
+            handsWon += 1;
+
+        cout << endl << endl;
+        cout << "HANDS PLAYED: " << handsWon + handsLost << endl;
+        cout << "- HANDS WON: " << handsWon << endl;
+        cout << "- HANDS LOST: " << handsLost << endl;
+
+        if(bankroll > 0) {
+            while(
+                playAgainInput != "y" && playAgainInput != "Y" &&
+                playAgainInput != "n" && playAgainInput != "N" 
+            ) {
+                cout << endl << "Do you want to play again(y/N)? \n> ";
+                cin >> playAgainInput;
+                // clear anything leftover on the input line
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        
+            if(playAgainInput == "n" || playAgainInput == "N")
+                playAgain = false;
+            else {
+                cout << endl << endl;
+                for(int i=0; i<44; i++) cout << "\u2660" << " ";
+                cout << endl;
+                for(int i=0; i<43; i++) cout << " " << "\u2665";
+                cout << endl;
+                for(int i=0; i<44; i++) cout << "\u2666" << " ";
+                cout << endl;
+                for(int i=0; i<43; i++) cout << " " << "\u2663";
+                cout << endl;
+                for(int i=0; i<44; i++) cout << "\u2666" << " ";
+                cout << endl;
+                for(int i=0; i<43; i++) cout << " " << "\u2665";
+                cout << endl;
+                for(int i=0; i<44; i++) cout << "\u2660" << " ";
+                cout << endl << endl << endl;
+            }
+        }
+        else {
+            cout << "\nYOU WENT BUST!" << endl;
+            playAgain = false;         
         }
 
-        if(playAgainInput == "n" || playAgainInput == "N")
-            playAgain = false;
-
-        // clear anything leftover on the input line
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
     }
-
     cout << endl << endl << "bye bye..." << endl << endl;
 }
 
@@ -460,9 +498,9 @@ void handleBet(int& bankroll, int betAmount, int pokerHandRank) {
         bankroll -= betAmount;
 
     if(bankroll > oldBankroll)
-        cout << "\nYou won: $" << (bankroll-oldBankroll) << endl;
+        cout << "\nYOU WON: $" << (bankroll-oldBankroll) << endl;
     else
-        cout << "\nYou lost: $" << betAmount << endl;
+        cout << "\nYOU LOST: $" << betAmount << endl;
     cout << "NEW BALANCE: $" << bankroll << endl;
 }
 
