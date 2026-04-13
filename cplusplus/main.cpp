@@ -112,7 +112,7 @@ int main() {
     while(playAgain == true) {
         string playAgainInput;
 
-        cout << "BANKROLL: $" << bankroll << endl;
+        cout << "BANKROLL: $" << bankroll << endl << endl;
         cout << "HOW MUCH DO YOU WANT TO BET \n$";
 
         do {
@@ -136,7 +136,7 @@ int main() {
         else
             handsWon += 1;
 
-        cout << endl << endl;
+        cout << endl;
         cout << "HANDS PLAYED: " << handsWon + handsLost << endl;
         cout << "- HANDS WON: " << handsWon << endl;
         cout << "- HANDS LOST: " << handsLost << endl;
