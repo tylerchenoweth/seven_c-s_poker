@@ -79,9 +79,9 @@ void displayHand(OneCard[]);
 void holdOrDraw(OneCard[]);
 void sortHand(OneCard[]);
 int determineHand(OneCard[]);
-void handleBet(int&, int, int);
+void handleBet(long&, long, int);
 bool isInteger(const string&);
-int getIntegerInput();
+long getIntegerInput();
 
 
 int main() {
@@ -94,8 +94,8 @@ int main() {
     cout << "--------------------------------------------" << endl;
     cout << endl;
 
-    int bankroll;
-    int betAmount;
+    long bankroll;
+    long betAmount;
     int pokerHandRank;
     string strBetAmount;
     bool playAgain = true;
@@ -117,7 +117,7 @@ int main() {
 
         do {
             betAmount = getIntegerInput();
-        } while(betAmount <= 0);
+        } while(betAmount <= 0 || betAmount > bankroll);
 
         initiateCard(Deck);
         // printDeck(Deck);
@@ -253,8 +253,8 @@ void displayHand(OneCard Deck[]) {
         {0, 5, 7, 7, 7, 7, 7, 7, 7, 6, 0}, // K
         {0, 1, 7, 7, 7, 8, 7, 7, 7, 2, 0}, // A
     };
-    int space = 3;
 
+    int space = 3;
     cout << endl;
 
     // go through lines
@@ -306,7 +306,6 @@ void displayHand(OneCard Deck[]) {
     }
     cout << endl;
 }
-
 
 
 void holdOrDraw(OneCard Deck[]) {
@@ -473,8 +472,8 @@ int determineHand(OneCard Deck[]) {
 }
 
 
-void handleBet(int& bankroll, int betAmount, int pokerHandRank) {
-    int oldBankroll = bankroll;
+void handleBet(long& bankroll, long betAmount, int pokerHandRank) {
+    long oldBankroll = bankroll;
 
     if(pokerHandRank == 9)
         bankroll += (betAmount * 100);
@@ -512,9 +511,9 @@ bool isInteger(const string& s) {
 }
 
 
-int getIntegerInput() {
+long getIntegerInput() {
     string input;
-    int num;
+    long num;
     
     while (true) {
         getline(cin, input);
